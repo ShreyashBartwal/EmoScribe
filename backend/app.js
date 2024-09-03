@@ -1,23 +1,16 @@
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
-// Initialize the Express app
-const app = express();
+const userRoutes = require('./routes/userRoutes');
+const entryRoutes = require('./routes/entryRoutes');
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Routes (Set up your routes here)
-app.get('/', (req, res) => {
-  res.send('Welcome to EmoScribe API');
-});
+// Routes
+app.use('/api/users', userRoutes);
+app.use('/api/entries', entryRoutes);
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something went wrong!');
-});
-
-module.exports = app;
+module.exports = app; // Export the app for use in server.js
