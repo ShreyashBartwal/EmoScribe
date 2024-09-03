@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
+const entryRoutes = require('./routes/entryRoutes'); // Import entryRoutes
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -12,7 +13,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api', userRoutes);
+app.use('/api', userRoutes); // Ensure correct route
+app.use('/api', entryRoutes); // Ensure correct route
 
 // Connect to MongoDB
 mongoose.connect(DB_URI, {

@@ -1,11 +1,25 @@
 const mongoose = require('mongoose');
 
-const entrySchema = new mongoose.Schema({
-  entry: { type: String, required: true },
-  sentiment: { type: Object, required: true },
-  date: { type: Date, default: Date.now },
+const EntrySchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    entry: {
+        type: String,
+        required: true
+    },
+    sentiment: {
+        score: Number,
+        comparative: Number,
+        positive: [String],
+        negative: [String]
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-const Entry = mongoose.model('Entry', entrySchema, 'entries'); // 'entries' is the collection name
-
-module.exports = Entry;
+module.exports = mongoose.model('Entry', EntrySchema);
