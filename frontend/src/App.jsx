@@ -10,6 +10,9 @@ function HomePage() {
   return (
     <div className="text-center mt-10">
       <h2 className="text-2xl font-semibold mb-4">Welcome to EmoScribe</h2>
+      <h2 className="text-2xl font-semibold mb-4">Where positivity matters!</h2>
+      <p className="font-semibold">This is an AI driven Mood Diary where you can enter your entries of how you feel and all the things that are happening in your life!</p>
+      <br />
       <div className="space-x-4">
         <Link
           to="/new-entry"
@@ -58,7 +61,7 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
-          <h1>EmoScribe</h1>
+          <h1 className="bg-black text-white h-10 text-center font-semibold">EmoScribe</h1>
           {token && (
             <button
               onClick={handleLogout}
