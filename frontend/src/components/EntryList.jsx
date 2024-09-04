@@ -7,7 +7,7 @@ function EntryList({ token }) {
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/entries", {
+        const response = await axios.get("http://localhost:5000/api/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEntries(response.data);
