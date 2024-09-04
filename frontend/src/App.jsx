@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
@@ -32,16 +32,32 @@ function App() {
   const [token, setToken] = useState("");
   const [showLogin, setShowLogin] = useState(true); // State to toggle between login and register
 
+  // Load token from localStorage on mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const handleLogin = (token) => {
     setToken(token);
+    localStorage.setItem("token", token); // Store token in localStorage
   };
 
   const handleRegister = (token) => {
     setToken(token);
+    localStorage.setItem("token", token); // Store token in localStorage
   };
 
   const toggleForm = () => {
     setShowLogin(!showLogin);
+  };
+
+  // Logout function
+  const handleLogout = () => {
+    setToken("");
+    localStorage.removeItem("token"); // Clear token from localStorage
   };
 
   return (
@@ -55,6 +71,14 @@ function App() {
               className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 transition"
             >
               {showLogin ? "Switch to Register" : "Switch to Login"}
+            </button>
+          )}
+          {token && (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white p-2 rounded hover:bg-red-700 transition"
+            >
+              Logout
             </button>
           )}
           <Routes>
