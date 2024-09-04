@@ -30,9 +30,8 @@ function HomePage() {
 
 function App() {
   const [token, setToken] = useState("");
-  const [showLogin, setShowLogin] = useState(true); // State to toggle between login and register
+  const [showLogin, setShowLogin] = useState(true);
 
-  // Load token from localStorage on mount
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -42,22 +41,17 @@ function App() {
 
   const handleLogin = (token) => {
     setToken(token);
-    localStorage.setItem("token", token); // Store token in localStorage
+    localStorage.setItem("token", token);
   };
 
   const handleRegister = (token) => {
     setToken(token);
-    localStorage.setItem("token", token); // Store token in localStorage
+    localStorage.setItem("token", token);
   };
 
-  const toggleForm = () => {
-    setShowLogin(!showLogin);
-  };
-
-  // Logout function
   const handleLogout = () => {
     setToken("");
-    localStorage.removeItem("token"); // Clear token from localStorage
+    localStorage.removeItem("token");
   };
 
   return (
@@ -65,14 +59,6 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>EmoScribe</h1>
-          {!token && (
-            <button
-              onClick={toggleForm}
-              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 transition"
-            >
-              {showLogin ? "Switch to Register" : "Switch to Login"}
-            </button>
-          )}
           {token && (
             <button
               onClick={handleLogout}
@@ -86,11 +72,39 @@ function App() {
               <Route
                 path="/"
                 element={
-                  showLogin ? (
-                    <Login onLogin={handleLogin} />
-                  ) : (
-                    <Register onRegister={handleRegister} />
-                  )
+                  <div className="flex flex-col items-center">
+                    {showLogin ? (
+                      <>
+                        <Login onLogin={handleLogin} />
+                        <div className="mt-4 text-center">
+                          <p className="text-sm text-gray-600">
+                            Don't have an account?{" "}
+                            <span
+                              onClick={() => setShowLogin(false)}
+                              className="text-blue-600 hover:underline cursor-pointer"
+                            >
+                              Sign up
+                            </span>
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Register onRegister={handleRegister} />
+                        <div className="mt-4 text-center">
+                          <p className="text-sm text-gray-600">
+                            Already have an account?{" "}
+                            <span
+                              onClick={() => setShowLogin(true)}
+                              className="text-blue-600 hover:underline cursor-pointer"
+                            >
+                              Login
+                            </span>
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 }
               />
             ) : (
