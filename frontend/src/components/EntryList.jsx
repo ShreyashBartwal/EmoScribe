@@ -22,11 +22,16 @@ class EntryList extends Component {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();
-      this.setState({ entries: data, loading: false });
+      
+      // Sort entries by createdAt date in descending order
+      const sortedEntries = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      this.setState({ entries: sortedEntries, loading: false });
     } catch (err) {
       this.setState({ error: 'Failed to fetch entries', loading: false });
     }
   };
+  
 
   handleEntryClick = (entry) => {
     this.setState({ selectedEntry: entry });
@@ -54,7 +59,7 @@ class EntryList extends Component {
     }
 
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container max-w-screen-2xl px-4 py-8">
         <h2 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
           Your Emotional Journey
         </h2>

@@ -41,11 +41,12 @@ const SideNavbar = ({ onLogout }) => {
         ${isOpen ? 'w-64' : 'w-20'} 
         h-screen flex flex-col
         border-r border-purple-500/20
+        overflow-hidden
       `}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-grow overflow-hidden">
         <h2 className={`
           text-2xl font-bold mb-6 transition-all duration-300
           bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300
@@ -54,7 +55,7 @@ const SideNavbar = ({ onLogout }) => {
           {isOpen ? 'EmoScribe' : 'E'}
         </h2>
         
-        <nav className="flex flex-col space-y-2">
+        <nav className="flex flex-col flex-grow overflow-hidden">
           {navItems.map((item) => (
             <NavItem 
               key={item.path} 

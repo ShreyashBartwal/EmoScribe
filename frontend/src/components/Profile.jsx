@@ -11,6 +11,8 @@ const calendarStyles = `
     border: 1px solid rgba(139, 92, 246, 0.2);
     border-radius: 0.5rem;
     color: white;
+    max-width: 100%; /* Ensure the calendar does not exceed its container */
+    overflow: hidden; /* Prevent overflow */
   }
   .react-calendar__tile {
     color: #e5e7eb;
@@ -55,9 +57,9 @@ const Profile = ({ token }) => {
         setUser(profileRes.data);
         setEntries(entriesRes.data);
         setMarkedDates(entriesRes.data.map((entry) => new Date(entry.createdAt)));
-        setLoading(false);
       } catch (err) {
         setError('Failed to load profile or entries');
+      } finally {
         setLoading(false);
       }
     };
@@ -79,7 +81,7 @@ const Profile = ({ token }) => {
   };
 
   const tileContent = ({ date, view }) => {
-    if (view === 'month' && markedDates.find((d) => d.toDateString() === date.toDateString())) {
+    if (view === 'month' && markedDates.some((d) => d.toDateString() === date.toDateString())) {
       return <div className="bg-purple-400 w-1.5 h-1.5 rounded-full mx-auto"></div>;
     }
     return null;
@@ -102,16 +104,16 @@ const Profile = ({ token }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-full overflow-hidden">
       <style>{calendarStyles}</style>
       
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-fit mx-auto">
         <h2 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
           Your Emotional Journey
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-purple-500/20">
+          <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-purple-500/20 overflow-hidden">
             <h3 className="text-xl font-semibold mb-4 text-purple-300">Profile Details</h3>
             {user && (
               <div className="space-y-2">
@@ -121,18 +123,20 @@ const Profile = ({ token }) => {
             )}
           </div>
 
-          <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-purple-500/20">
+          <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-purple-500/20 overflow-hidden">
             <h3 className="text-xl font-semibold mb-4 text-purple-300">Entry Calendar</h3>
-            <Calendar
-              onChange={handleDateChange}
-              tileContent={tileContent}
-              className="w-full"
-            />
+            <div className="overflow-hidden"> {/* Add overflow hidden here */}
+              <Calendar
+                onChange={handleDateChange}
+                tileContent={tileContent}
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
 
         {selectedDate && (
-          <div className="mt-8 bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-purple-500/20">
+          <div className="mt-8 bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-purple-500/20 overflow-hidden">
             <h4 className="text-xl font-semibold mb-4 text-purple-300">
               Entries for {selectedDate.toDateString()}
             </h4>
