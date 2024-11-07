@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const NavItem = ({ to, children, isActive, isOpen }) => (
   <Link
@@ -19,9 +19,10 @@ const NavItem = ({ to, children, isActive, isOpen }) => (
   </Link>
 );
 
-const SideNavbar = ({ onLogout }) => {
+const SideNavbar = ({ onLogout, setSidebarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path) => location.pathname === path;
 
@@ -33,19 +34,30 @@ const SideNavbar = ({ onLogout }) => {
     { path: '/chart', icon: '📊', shortIcon: '📊', text: 'Sentiment Chart' },
   ];
 
+  useEffect(() => {
+    setSidebarOpen(isOpen);
+  }, [isOpen, setSidebarOpen]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    if (onLogout) onLogout();
+    navigate('/');
+  };
+
   return (
-    <div 
+    <div
       className={`
         bg-gradient-to-b from-gray-900 to-purple-900
         transition-all duration-300 ease-in-out
         ${isOpen ? 'w-64' : 'w-20'} 
         h-screen flex flex-col
         border-r border-purple-500/20
+        fixed top-0 left-0 overflow-y-hidden
       `}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-grow overflow-hidden">
         <h2 className={`
           text-2xl font-bold mb-6 transition-all duration-300
           bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300
@@ -54,7 +66,7 @@ const SideNavbar = ({ onLogout }) => {
           {isOpen ? 'EmoScribe' : 'E'}
         </h2>
         
-        <nav className="flex flex-col space-y-2">
+        <nav className="flex flex-col flex-grow overflow-hidden">
           {navItems.map((item) => (
             <NavItem 
               key={item.path} 
@@ -73,7 +85,7 @@ const SideNavbar = ({ onLogout }) => {
       </div>
 
       <button
-        onClick={onLogout}
+        onClick={handleLogout}
         className={`
           mt-auto mx-4 mb-4 p-3 rounded-lg
           bg-gradient-to-r from-red-500 to-red-600

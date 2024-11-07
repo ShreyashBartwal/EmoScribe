@@ -5,6 +5,7 @@
 
 /* Global styles */
 html, body {
-  @apply m-0 p-0 w-full h-full; /* Remove default margin and padding */
+  @apply m-0 p-0 w-full h-full; /* Center elements in the viewport */
   background-color: #1e1e2f; /* Example background color */
+  color: white; /* Default text color */
 }

@@ -1,0 +1,28 @@
+
+.App {
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent scrolling */
+  }
+  
+  .App-header {
+    display: flex;
+    height: 100%; /* Full height to the header */
+    overflow: hidden; /* Prevent scrolling in the header */
+  }
+  
+  .flex-grow {
+    flex-grow: 1; /* Allow this to take the remaining space */
+    overflow: hidden; /* Prevent scrolling in the content area */
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Column layout */
+  }
+  
+  /* Optional: style for Routes to fit the screen */
+  .routes-container {
+    flex-grow: 1; /* Allow to grow */
+    overflow-y: auto; /* Enable vertical scroll for this specific area if necessary */
+  }
+  .container {
+    overflow: hidden;
+  }
+  

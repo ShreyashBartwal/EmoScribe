@@ -22,7 +22,11 @@ class EntryList extends Component {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();
-      this.setState({ entries: data, loading: false });
+      
+      // Sort entries by createdAt date in descending order
+      const sortedEntries = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      this.setState({ entries: sortedEntries, loading: false });
     } catch (err) {
       this.setState({ error: 'Failed to fetch entries', loading: false });
     }
@@ -42,6 +46,18 @@ class EntryList extends Component {
     return '😐';
   };
 
+  renderTone(tone) {
+    if (!tone) return null;
+
+    return (
+      <div className="mt-4">
+        <h4 className="text-purple-300 font-semibold">Tone Analysis</h4>
+        <p className="text-gray-300">Overall Confidence: {tone.confidence.toFixed(2)}</p>
+        <p className="text-gray-300">Tone Types: {tone.toneTypes.join(', ')}</p>
+      </div>
+    );
+  }
+
   render() {
     const { entries, error, loading, selectedEntry } = this.state;
 
@@ -54,7 +70,7 @@ class EntryList extends Component {
     }
 
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container max-w-screen-2xl px-4 py-8">
         <h2 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
           Your Emotional Journey
         </h2>
@@ -126,21 +142,27 @@ class EntryList extends Component {
                   {new Date(selectedEntry.createdAt).toLocaleString()}
                 </span>
               </div>
-              <p className="text-white text-lg mb-6">{selectedEntry.entry}</p>
-              <div className="bg-black/20 rounded-lg p-4">
-                <h3 className="text-purple-300 font-semibold mb-2">Sentiment Analysis</h3>
-                <p className="text-gray-300 mb-2">Score: {selectedEntry.sentiment?.score.toFixed(2)}</p>
-                <p className="text-gray-300 mb-2">Comparative: {selectedEntry.sentiment?.comparative.toFixed(2)}</p>
-                {selectedEntry.sentiment?.positive?.length > 0 && (
-                  <p className="text-green-400 mb-2">
-                    Positive: {selectedEntry.sentiment.positive.join(', ')}
-                  </p>
-                )}
-                {selectedEntry.sentiment?.negative?.length > 0 && (
-                  <p className="text-red-400">
-                    Negative: {selectedEntry.sentiment.negative.join(', ')}
-                  </p>
-                )}
+
+              {/* Scrollable Content */}
+              <div className="max-h-[60vh] overflow-y-auto">
+                <p className="text-white text-lg mb-6">{selectedEntry.entry}</p>
+                <div className="bg-black/20 rounded-lg p-4">
+                  <h3 className="text-purple-300 font-semibold mb-2">Sentiment Analysis</h3>
+                  <p className="text-gray-300 mb-2">Score: {selectedEntry.sentiment?.score.toFixed(2)}</p>
+                  <p className="text-gray-300 mb-2">Comparative: {selectedEntry.sentiment?.comparative.toFixed(2)}</p>
+                  {selectedEntry.sentiment?.positive?.length > 0 && (
+                    <p className="text-green-400 mb-2">
+                      Positive: {selectedEntry.sentiment.positive.join(', ')}
+                    </p>
+                  )}
+                  {selectedEntry.sentiment?.negative?.length > 0 && (
+                    <p className="text-red-400">
+                      Negative: {selectedEntry.sentiment.negative.join(', ')}
+                    </p>
+                  )}
+
+                  {this.renderTone(selectedEntry.tone)}
+                </div>
               </div>
             </div>
           </div>

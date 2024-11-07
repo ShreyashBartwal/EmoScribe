@@ -6,9 +6,11 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.21.1",
+    "ibm-watson": "^9.1.0",
     "sentiment": "^5.0.2"
   },
   "devDependencies": {
