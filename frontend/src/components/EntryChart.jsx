@@ -70,6 +70,12 @@ const EntryChart = ({ token }) => {
     );
   }
 
+  // Sort the entries in descending order by createdAt date
+  const sortedEntries = [...entries].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // Get the latest entry (first in the sorted list)
+  const latestEntry = sortedEntries[0];
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
@@ -164,7 +170,7 @@ const EntryChart = ({ token }) => {
               <div className="p-4">
                 <h3 className="text-purple-300 font-semibold mb-2">Latest Entry</h3>
                 <p className="text-2xl text-white">
-                  {entries.length ? new Date(entries[0].createdAt).toLocaleDateString() : 'No entries yet'}
+                  {latestEntry ? new Date(latestEntry.createdAt).toLocaleDateString() : 'No entries yet'}
                 </p>
               </div>
             </div>

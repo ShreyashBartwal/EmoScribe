@@ -31,7 +31,6 @@ class EntryList extends Component {
       this.setState({ error: 'Failed to fetch entries', loading: false });
     }
   };
-  
 
   handleEntryClick = (entry) => {
     this.setState({ selectedEntry: entry });
@@ -46,6 +45,18 @@ class EntryList extends Component {
     if (score < 0) return '😔';
     return '😐';
   };
+
+  renderTone(tone) {
+    if (!tone) return null;
+
+    return (
+      <div className="mt-4">
+        <h4 className="text-purple-300 font-semibold">Tone Analysis</h4>
+        <p className="text-gray-300">Overall Confidence: {tone.confidence.toFixed(2)}</p>
+        <p className="text-gray-300">Tone Types: {tone.toneTypes.join(', ')}</p>
+      </div>
+    );
+  }
 
   render() {
     const { entries, error, loading, selectedEntry } = this.state;
@@ -131,21 +142,27 @@ class EntryList extends Component {
                   {new Date(selectedEntry.createdAt).toLocaleString()}
                 </span>
               </div>
-              <p className="text-white text-lg mb-6">{selectedEntry.entry}</p>
-              <div className="bg-black/20 rounded-lg p-4">
-                <h3 className="text-purple-300 font-semibold mb-2">Sentiment Analysis</h3>
-                <p className="text-gray-300 mb-2">Score: {selectedEntry.sentiment?.score.toFixed(2)}</p>
-                <p className="text-gray-300 mb-2">Comparative: {selectedEntry.sentiment?.comparative.toFixed(2)}</p>
-                {selectedEntry.sentiment?.positive?.length > 0 && (
-                  <p className="text-green-400 mb-2">
-                    Positive: {selectedEntry.sentiment.positive.join(', ')}
-                  </p>
-                )}
-                {selectedEntry.sentiment?.negative?.length > 0 && (
-                  <p className="text-red-400">
-                    Negative: {selectedEntry.sentiment.negative.join(', ')}
-                  </p>
-                )}
+
+              {/* Scrollable Content */}
+              <div className="max-h-[60vh] overflow-y-auto">
+                <p className="text-white text-lg mb-6">{selectedEntry.entry}</p>
+                <div className="bg-black/20 rounded-lg p-4">
+                  <h3 className="text-purple-300 font-semibold mb-2">Sentiment Analysis</h3>
+                  <p className="text-gray-300 mb-2">Score: {selectedEntry.sentiment?.score.toFixed(2)}</p>
+                  <p className="text-gray-300 mb-2">Comparative: {selectedEntry.sentiment?.comparative.toFixed(2)}</p>
+                  {selectedEntry.sentiment?.positive?.length > 0 && (
+                    <p className="text-green-400 mb-2">
+                      Positive: {selectedEntry.sentiment.positive.join(', ')}
+                    </p>
+                  )}
+                  {selectedEntry.sentiment?.negative?.length > 0 && (
+                    <p className="text-red-400">
+                      Negative: {selectedEntry.sentiment.negative.join(', ')}
+                    </p>
+                  )}
+
+                  {this.renderTone(selectedEntry.tone)}
+                </div>
               </div>
             </div>
           </div>
